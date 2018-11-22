@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SQLite3
+
 //DBManager to handle all the database related queries
 //Table Creation
 //Updation, deletion, insertion and/or selection of table rows
@@ -41,6 +43,47 @@ class DBManager {
             print("Error is \(error)")
         }
         return url!
+    }
+    
+    func openDBConnection(){
+        
+    }
+    
+    func setUpDatabase(){
+        var database:OpaquePointer? = nil
+        var errMsg:UnsafeMutablePointer<Int8>? = nil
+        var result = sqlite3_open(dataFilePath(), &database)
+        if result != SQLITE_OK {
+            sqlite3_close(database)
+            print("Failed to open database")
+            return
+        }
+        
+        let createNoteTable = "CREATE TABLE IF NOT EXISTS NOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat INTEGER, Lon INTEGER, Date TEXT, ImageName TEXT);"
+        result = sqlite3_exec(database, createNoteTable, nil, nil, &errMsg)
+        if (result != SQLITE_OK) {
+            sqlite3_close(database)
+            print("Failed to create table")
+            return
+        }
+        
+        let createSubjectTable = "CREATE TABLE IF NOT EXISTS SUBJECT (ID INTEGER PRIMARY KEY, Title TEXT, Description TEXT);"
+        result = sqlite3_exec(database, createSubjectTable, nil, nil, &errMsg)
+        if (result != SQLITE_OK) {
+            sqlite3_close(database)
+            print("Failed to create table")
+            return
+        }
+        
+        let createTempNoteTable = "CREATE TABLE IF NOT EXISTS TEMPNOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat INTEGER, Lon INTEGER, Date TEXT, Image TEXT);"
+        result = sqlite3_exec(database, createTempNoteTable, nil, nil, &errMsg)
+        if (result != SQLITE_OK) {
+            sqlite3_close(database)
+            print("Failed to create table")
+            return
+        }
+        
+        sqlite3_close(database)
     }
     
 }

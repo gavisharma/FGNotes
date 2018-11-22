@@ -16,6 +16,7 @@
 		5625F15521A61FEF00CF817B /* FGSelectSubjectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625F15421A61FEF00CF817B /* FGSelectSubjectVC.swift */; };
 		5625F15721A6201500CF817B /* FGViewNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625F15621A6201500CF817B /* FGViewNotesVC.swift */; };
 		5625F15921A6218200CF817B /* FGNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625F15821A6218200CF817B /* FGNoteVC.swift */; };
+		5625F15C21A735BF00CF817B /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5625F15B21A735BF00CF817B /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,8 @@
 		5625F15421A61FEF00CF817B /* FGSelectSubjectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGSelectSubjectVC.swift; sourceTree = "<group>"; };
 		5625F15621A6201500CF817B /* FGViewNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGViewNotesVC.swift; sourceTree = "<group>"; };
 		5625F15821A6218200CF817B /* FGNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGNoteVC.swift; sourceTree = "<group>"; };
+		5625F15B21A735BF00CF817B /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		5625F15E21A7366200CF817B /* Database_Application-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Database_Application-Bridging-Header.h"; path = "FGNotes/Database_Application-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5625F15C21A735BF00CF817B /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +52,7 @@
 			children = (
 				40CE749E21A614C70051AFBD /* FGNotes */,
 				40CE749D21A614C70051AFBD /* Products */,
+				5625F15A21A735BE00CF817B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,6 +79,15 @@
 				4006861421A6FE0F005A1B1D /* DBManager.swift */,
 			);
 			path = FGNotes;
+			sourceTree = "<group>";
+		};
+		5625F15A21A735BE00CF817B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5625F15E21A7366200CF817B /* Database_Application-Bridging-Header.h */,
+				5625F15B21A735BF00CF817B /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

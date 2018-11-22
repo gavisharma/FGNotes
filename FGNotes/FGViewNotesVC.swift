@@ -38,6 +38,7 @@ class FGViewNotesVC: UIViewController {
         case 10:
             print("Sort by Title clicked")
             print("\(sharedDatabaseManager.dataFilePath())")
+            sharedDatabaseManager.setUpDatabase()
         case 11:
             print("Sort by Date/Time clicked")
         case 12:
