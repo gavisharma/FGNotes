@@ -2,7 +2,7 @@
 //  FGSelectSubjectVC.swift
 //  FGNotes
 //
-//  Created by Govinda Sharma on 2018-11-21.
+//  Created by Foram Dadhania on 2018-11-21.
 //  Copyright © 2018 Foram Dadhania. All rights reserved.
 //
 
