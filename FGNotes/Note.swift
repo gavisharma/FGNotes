@@ -29,13 +29,13 @@ class Note: NSObject {
         self.image = ""
     }
     
-    func create(note: Note) -> Note {
-        self.id = note.id
-        self.title = note.title
-        self.subId = note.subId
-        self.location = note.location
-        self.date = note.date
-        self.image = note.image
+    func create(id: Int, title: String, subID: Int, content: String, location: CLLocationCoordinate2D, date: Date, image: String) -> Note {
+        self.id = id
+        self.title = title
+        self.subId = subID
+        self.location = location
+        self.date = date
+        self.image = image
         return self
     }
 }
