@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4006861521A6FE0F005A1B1D /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006861421A6FE0F005A1B1D /* DBManager.swift */; };
+		4006861721A997E3005A1B1D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006861621A997E3005A1B1D /* Note.swift */; };
 		40CE74A021A614C70051AFBD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CE749F21A614C70051AFBD /* AppDelegate.swift */; };
 		40CE74A221A614C70051AFBD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CE74A121A614C70051AFBD /* ViewController.swift */; };
 		40CE74A521A614C70051AFBD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40CE74A321A614C70051AFBD /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		4006861421A6FE0F005A1B1D /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBManager.swift; path = DBManager/DBManager.swift; sourceTree = "<group>"; };
+		4006861621A997E3005A1B1D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		40CE749C21A614C70051AFBD /* FGNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FGNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40CE749F21A614C70051AFBD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40CE74A121A614C70051AFBD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				5625F15621A6201500CF817B /* FGViewNotesVC.swift */,
 				5625F15821A6218200CF817B /* FGNoteVC.swift */,
 				4006861421A6FE0F005A1B1D /* DBManager.swift */,
+				4006861621A997E3005A1B1D /* Note.swift */,
 			);
 			path = FGNotes;
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 			files = (
 				5625F15521A61FEF00CF817B /* FGSelectSubjectVC.swift in Sources */,
 				4006861521A6FE0F005A1B1D /* DBManager.swift in Sources */,
+				4006861721A997E3005A1B1D /* Note.swift in Sources */,
 				5625F15921A6218200CF817B /* FGNoteVC.swift in Sources */,
 				5625F15721A6201500CF817B /* FGViewNotesVC.swift in Sources */,
 				40CE74A221A614C70051AFBD /* ViewController.swift in Sources */,

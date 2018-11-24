@@ -23,9 +23,9 @@ class FGSelectSubjectVC: UIViewController {
     @IBAction func addNoteVC(_ sender: Any) {
         let noteVC:FGNoteVC = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as! FGNoteVC
         self.present(noteVC, animated: true, completion: nil)
-        self.present(noteVC, animated: true) {
-            self.dismiss(animated: true, completion: nil)
-        }
+//        self.present(noteVC, animated: true) {
+//            self.dismiss(animated: true, completion: nil)
+//        }
     }
     
     override func didReceiveMemoryWarning() {
