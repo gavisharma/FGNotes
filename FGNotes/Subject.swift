@@ -10,19 +10,19 @@ import Foundation
 
 class Subject: NSObject {
     var id:Int = 0
-    var name:String = ""
+    var title:String = ""
     var desc:String = ""
     
     override init() {
         super.init()
         self.id = 0
-        self.name = ""
+        self.title = ""
         self.desc = ""
     }
     
     func sub(id:Int, name:String, desc:String) -> Subject {
         self.id = id
-        self.name = name
+        self.title = name
         self.desc = desc
         return self
     }

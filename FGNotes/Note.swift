@@ -15,7 +15,7 @@ class Note: NSObject {
     var subId: Int = 0
     var content: String = ""
     var location: CLLocationCoordinate2D? = nil
-    var date: Date? = nil
+    var date: String = ""
     var image: String = ""
     
     override init() {
@@ -25,11 +25,11 @@ class Note: NSObject {
         self.subId = 0
         self.content = ""
         self.location = nil
-        self.date = nil
+        self.date = ""
         self.image = ""
     }
     
-    func create(id: Int, title: String, subID: Int, content: String, location: CLLocationCoordinate2D, date: Date, image: String) -> Note {
+    func create(id: Int, title: String, subID: Int, content: String, location: CLLocationCoordinate2D, date: String, image: String) -> Note {
         self.id = id
         self.title = title
         self.subId = subID

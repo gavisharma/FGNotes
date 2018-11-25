@@ -22,6 +22,12 @@ class FGNoteVC: UIViewController {
     }
     
     @IBAction func backButtonClicked(_ sender: Any) {
+        sharedDatabaseManager.insertIntoTempNoteTable(note: Note.init())
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func saveNoteAction(_ sender: Any) {
+        sharedDatabaseManager.insertIntoNoteTable(note: Note.init())
         self.dismiss(animated: true, completion: nil)
     }
     
