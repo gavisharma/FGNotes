@@ -161,35 +161,28 @@ class DBManager {
         }
     }
     
-    func query() {
+    func getLastNoteIDFromNotes(){
+        var queryString = "SELECT MAX(ID) FROM NOTE;"
+        selectQuery(queryString: queryString)
+    }
+    
+    
+    func selectQuery(queryString: String) {
+        openDB()
         var queryStatement: OpaquePointer? = nil
-        // 1
-        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
-            // 2
+        if sqlite3_prepare_v2(database, queryString, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
-                // 3
-                let id = sqlite3_column_int(queryStatement, 0)
-                
-                // 4
-                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                let name = String(cString: queryResultCol1!)
-                
-                // 5
-                print("Query Result:")
-                print("\(id) | \(name)")
-                
+//                let id = sqlite3_column_int(queryStatement, 0)
+//                print("Query Result:")
+//
             } else {
                 print("Query returned no results")
             }
         } else {
             print("SELECT statement could not be prepared")
         }
-        
-        // 6
         sqlite3_finalize(queryStatement)
     }
-
-    
 }
 
 
