@@ -19,6 +19,7 @@
 		5625F15721A6201500CF817B /* FGViewNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625F15621A6201500CF817B /* FGViewNotesVC.swift */; };
 		5625F15921A6218200CF817B /* FGNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625F15821A6218200CF817B /* FGNoteVC.swift */; };
 		5625F15C21A735BF00CF817B /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5625F15B21A735BF00CF817B /* libsqlite3.tbd */; };
+		5625F16021AB821A00CF817B /* FGNotesData.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 5625F15F21AB821900CF817B /* FGNotesData.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		5625F15821A6218200CF817B /* FGNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGNoteVC.swift; sourceTree = "<group>"; };
 		5625F15B21A735BF00CF817B /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		5625F15E21A7366200CF817B /* Database_Application-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Database_Application-Bridging-Header.h"; path = "FGNotes/Database_Application-Bridging-Header.h"; sourceTree = "<group>"; };
+		5625F15F21AB821900CF817B /* FGNotesData.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = FGNotesData.sqlite; path = FGNotes/FGNotesData.sqlite; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		40CE749321A614C70051AFBD = {
 			isa = PBXGroup;
 			children = (
+				5625F15F21AB821900CF817B /* FGNotesData.sqlite */,
 				40CE749E21A614C70051AFBD /* FGNotes */,
 				40CE749D21A614C70051AFBD /* Products */,
 				5625F15A21A735BE00CF817B /* Frameworks */,
@@ -156,6 +159,7 @@
 			files = (
 				40CE74AA21A614C80051AFBD /* LaunchScreen.storyboard in Resources */,
 				40CE74A721A614C80051AFBD /* Assets.xcassets in Resources */,
+				5625F16021AB821A00CF817B /* FGNotesData.sqlite in Resources */,
 				40CE74A521A614C70051AFBD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

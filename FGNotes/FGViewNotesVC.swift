@@ -8,16 +8,18 @@
 
 import UIKit
 
-class FGViewNotesVC: UIViewController {
+class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var hamburgerLeadingConstraint: NSLayoutConstraint!
     var hamburgerOpen: Bool = false
+    var notesArray:[Note] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         hamburgerLeadingConstraint.constant = -400
+        notesArray = sharedDatabaseManager.getAllNotes()!
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,7 +39,7 @@ class FGViewNotesVC: UIViewController {
         switch sender.tag {
         case 10:
             print("Sort by Title clicked")
-            print("\(sharedDatabaseManager.dataFilePath())")
+            print("\(sharedDatabaseManager.dbPath)")
             sharedDatabaseManager.openDB()
         case 11:
             print("Sort by Date/Time clicked")
@@ -80,6 +82,26 @@ class FGViewNotesVC: UIViewController {
     @IBAction func createNoteEvent(_ sender: Any) {
         let selectSubjectVC: FGSelectSubjectVC = storyboard?.instantiateViewController(withIdentifier: "SelectSubject") as! FGSelectSubjectVC
         self.present(selectSubjectVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return notesArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let noteCell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell")!
+        let titleLabel: UILabel = noteCell.viewWithTag(1) as! UILabel
+        let contentLabel:UILabel = noteCell.viewWithTag(2) as! UILabel
+        let imgView:UIImageView = noteCell.viewWithTag(3) as! UIImageView
+        imgView.image = #imageLiteral(resourceName: "AddNote")
+        let note: Note = notesArray[indexPath.row]
+        titleLabel.text = note.title
+        contentLabel.text = note.content
+        return noteCell
     }
 
 }
