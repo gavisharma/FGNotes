@@ -11,6 +11,7 @@ import UIKit
 class FGNoteVC: UIViewController {
     
     var selectedSubjectID:Int = 0
+    var selectedNote: Note? = nil
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var contentTextView: UITextView!
@@ -20,11 +21,14 @@ class FGNoteVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Note ID: \(sharedDatabaseManager.getLastNoteIDFromNotes())")
-        print("Selected Subject ID: \(selectedSubjectID)")
         let df = DateFormatter()
         df.dateFormat = "yyyy-MMM-dd hh:mm:ss a"
         dateLabel.text = df.string(from: Date())
+        if selectedNote != nil {
+            titleTextField.text = selectedNote?.title
+            dateLabel.text = df.string(from: (selectedNote?.date)!)
+            contentTextView.text = selectedNote?.content
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -38,7 +42,7 @@ class FGNoteVC: UIViewController {
         tempNote.id = sharedDatabaseManager.getLastNoteIDFromNotes()
         tempNote.subId = selectedSubjectID
         tempNote.title = titleTextField.text!
-        tempNote.date = dateLabel.text!
+        tempNote.date = Date()
         tempNote.content = contentTextView.text!
         sharedDatabaseManager.insertIntoTempNoteTable(note: tempNote)
         self.dismiss(animated: true, completion: nil)
@@ -50,7 +54,7 @@ class FGNoteVC: UIViewController {
         note.subId = selectedSubjectID
         note.title = titleTextField.text!
         print(note.title)
-        note.date = dateLabel.text!
+        note.date = Date()
         note.content = contentTextView.text!
         sharedDatabaseManager.insertIntoNoteTable(note: note)
         self.dismiss(animated: true, completion: nil)

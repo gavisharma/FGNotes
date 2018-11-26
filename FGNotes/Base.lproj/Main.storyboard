@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="y4B-Th-Nci">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="120" width="375" height="547"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteCell" rowHeight="90" id="7DH-g0-BqX">
@@ -309,19 +309,29 @@
                                     <constraint firstItem="R83-Ul-oLa" firstAttribute="top" secondItem="C4P-DB-QfQ" secondAttribute="top" id="zud-1A-Z4A"/>
                                 </constraints>
                             </view>
+                            <searchBar contentMode="redraw" placeholder="Enter keyword to search notes" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JoP-5B-JcD">
+                                <rect key="frame" x="0.0" y="64" width="375" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Sap-j3-uVz"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="vwU-Nd-bZ7" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0Ak-xq-Vtv"/>
                             <constraint firstItem="y4B-Th-Nci" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1T2-br-tic"/>
+                            <constraint firstItem="JoP-5B-JcD" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6Sr-dc-Aeh"/>
+                            <constraint firstItem="JoP-5B-JcD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="8a7-Cv-Muw"/>
                             <constraint firstItem="C4P-DB-QfQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DCZ-d8-ZWn"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lPN-X1-8Gs" secondAttribute="trailing" id="DZG-BH-vLa"/>
                             <constraint firstItem="C4P-DB-QfQ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="FTa-f0-Jzw"/>
                             <constraint firstItem="C4P-DB-QfQ" firstAttribute="top" secondItem="lPN-X1-8Gs" secondAttribute="bottom" id="OqH-bD-QZO"/>
+                            <constraint firstItem="JoP-5B-JcD" firstAttribute="top" secondItem="lPN-X1-8Gs" secondAttribute="bottom" id="RIl-Gu-z4s"/>
                             <constraint firstItem="y4B-Th-Nci" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="bXv-WJ-Opi"/>
                             <constraint firstItem="lPN-X1-8Gs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="dUR-Wp-Dif"/>
+                            <constraint firstItem="y4B-Th-Nci" firstAttribute="top" secondItem="JoP-5B-JcD" secondAttribute="bottom" id="dqm-1K-8PW"/>
                             <constraint firstItem="C4P-DB-QfQ" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.8" id="eka-Xz-Csn"/>
-                            <constraint firstItem="y4B-Th-Nci" firstAttribute="top" secondItem="lPN-X1-8Gs" secondAttribute="bottom" id="gm8-oC-uoW"/>
                             <constraint firstItem="lPN-X1-8Gs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="npo-Hu-ARq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vwU-Nd-bZ7" secondAttribute="bottom" constant="15" id="qHn-YG-lHc"/>
                             <constraint firstItem="y4B-Th-Nci" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tIn-ig-A6B"/>
@@ -332,6 +342,7 @@
                     <connections>
                         <outlet property="hamburgerLeadingConstraint" destination="DCZ-d8-ZWn" id="YQk-hU-Vfn"/>
                         <outlet property="hamburgerView" destination="C4P-DB-QfQ" id="gfP-fN-ivU"/>
+                        <outlet property="notesTableView" destination="y4B-Th-Nci" id="9xH-7y-60C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

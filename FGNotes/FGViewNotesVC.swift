@@ -8,8 +8,9 @@
 
 import UIKit
 
-class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
+    @IBOutlet weak var notesTableView: UITableView!
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var hamburgerLeadingConstraint: NSLayoutConstraint!
     var hamburgerOpen: Bool = false
@@ -19,7 +20,13 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         hamburgerLeadingConstraint.constant = -400
-        notesArray = sharedDatabaseManager.getAllNotes()!
+        notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE;")!
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE;")!
+        notesTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,13 +45,14 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     @IBAction func hamburgerMenuItemsClickAction(_ sender: UIButton) {
         switch sender.tag {
         case 10:
-            print("Sort by Title clicked")
-            print("\(sharedDatabaseManager.dbPath)")
-            sharedDatabaseManager.openDB()
+            notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE ORDER BY TITLE ASC;")!
+            notesTableView.reloadData()
         case 11:
-            print("Sort by Date/Time clicked")
+            notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE ORDER BY DATE ASC;")!
+            notesTableView.reloadData()
         case 12:
-            print("Sort by Subject clicked")
+            notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE ORDER BY SUBID ASC;")!
+            notesTableView.reloadData()
         case 13:
             print("View subjects clicked")
         case 14:
@@ -102,6 +110,33 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         titleLabel.text = note.title
         contentLabel.text = note.content
         return noteCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let note: Note = notesArray[indexPath.row]
+        let noteVC:FGNoteVC = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as! FGNoteVC
+        noteVC.selectedNote = note
+        self.present(noteVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let note: Note = notesArray[indexPath.row]
+        let deleteQuery = "DELETE FROM NOTE where id = \(note.id)"
+        sharedDatabaseManager.deleteFromDatabase(query: deleteQuery)
+        notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE;")!
+        notesTableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE ORDER BY LOWER(TITLE) ASC;")!
+        notesTableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let searchString: String = "SELECT * FROM NOTE where title like \"%\(searchText.lowercased())%\" OR content like \"%\(searchText.lowercased())%\";"
+        notesArray = sharedDatabaseManager.getAllNotesWith(query: searchString)!
+        notesTableView.reloadData()
     }
 
 }
