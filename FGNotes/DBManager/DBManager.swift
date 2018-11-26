@@ -17,6 +17,7 @@ class DBManager {
     // MARK: - Properties
     var dbPath: String
     var database: OpaquePointer? = nil
+    var imagePath: URL? = nil
     
     // Initialization
     init() {
@@ -33,7 +34,6 @@ class DBManager {
         do {
             let check = try finalDatabaseURL?.checkResourceIsReachable()
             print(check ?? true)
-            print(finalDatabaseURL?.absoluteString)
         } catch {
             //Only executes if the application is opened for the first time
             //Get the path of the bundle folder
@@ -47,8 +47,8 @@ class DBManager {
                 //Directory created for storing images locally
                 let writablePath = urls.first?.appendingPathComponent("Images", isDirectory: true)
                 do{
-                    let dirCreated = try fileManager.createDirectory(at: writablePath!, withIntermediateDirectories: false, attributes: nil)
-                    print(dirCreated)
+                    try fileManager.createDirectory(at: writablePath!, withIntermediateDirectories: false, attributes: nil)
+                    imagePath = writablePath
                 } catch{
                     print(error.localizedDescription)
                 }
@@ -77,7 +77,7 @@ class DBManager {
     func createNoteTable(){
         openDB()
         var errMsg:UnsafeMutablePointer<Int8>? = nil
-        let createNoteTable = "CREATE TABLE IF NOT EXISTS NOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat TEXT, Lon TEXT, Date TEXT, ImageName TEXT);"
+        let createNoteTable = "CREATE TABLE IF NOT EXISTS NOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat TEXT, Lon TEXT, Date TEXT, ImageName TEXT, isLocationEnabled INTEGER);"
         let result = sqlite3_exec(database, createNoteTable, nil, nil, &errMsg)
         if (result != SQLITE_OK) {
             sqlite3_close(database)
@@ -110,7 +110,7 @@ class DBManager {
     func createTempNoteTable(){
         openDB()
         var errMsg:UnsafeMutablePointer<Int8>? = nil
-        let createTempNoteTable = "CREATE TABLE IF NOT EXISTS TEMPNOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat INTEGER, Lon INTEGER, Date TEXT, ImageName TEXT);"
+        let createTempNoteTable = "CREATE TABLE IF NOT EXISTS TEMPNOTE (ID INTEGER PRIMARY KEY, Title TEXT, SubId INTEGER, Content TEXT, Lat TEXT, Lon TEXT, Date TEXT, ImageName TEXT, isLocationEnabled INTEGER);"
         let result = sqlite3_exec(database, createTempNoteTable, nil, nil, &errMsg)
         if (result != SQLITE_OK) {
             sqlite3_close(database)
@@ -133,31 +133,34 @@ class DBManager {
         sqlite3_close(database)
     }
     
-    //MARK: Method to insert or create a note in the database
-    func insertIntoNoteTable(note: Note){
+    //MARK: Method to insert or add a new Subject
+    func insertIntoSubjectTable(subject: Subject){
         openDB()
-        let update = "INSERT OR REPLACE INTO NOTE(ID, Title, SubId, Content, Lat, Lon, Date, ImageName) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
+        let update = "INSERT OR REPLACE INTO SUBJECT(ID, Title) VALUES(?, ?);"
         var statement:OpaquePointer? = nil
         if sqlite3_prepare_v2(database, update, -1, &statement, nil) == SQLITE_OK {
-            sqlite3_bind_int(statement, 1, Int32(note.id))
-            sqlite3_bind_int(statement, 3, Int32(note.subId))
-            sqlite3_bind_text(statement, 2,(note.title as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(statement, 4, (note.content as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(statement, 5, (note.lat as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(statement, 6, (note.lon as NSString).utf8String, -1, nil)
-            //            sqlite3_bind_text(statement, 7, (note.date as NSString).utf8String, -1, nil)
-            sqlite3_bind_double(statement, 7, note.date.timeIntervalSinceReferenceDate)
-            sqlite3_bind_text(statement, 8, (note.image as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(statement, 1, Int32(subject.id))
+            sqlite3_bind_text(statement, 2,(subject.title as NSString).utf8String, -1, nil)
             executeQuery(query: statement)
         }
     }
     
-    //MARK: Method to insert or update the subject in the database
-    func insertSubjectTable(subject: Subject){
+    //MARK: Method to insert or create a note in the database
+    func insertIntoNoteTable(note: Note){
         openDB()
-        let update = "INSERT OR REPLACE INTO SUBJECT (ID, Title, Description) VALUES(\(subject.id), '\(subject.title)', '\(subject.desc)');"
+        let update = "INSERT OR REPLACE INTO NOTE(ID, Title, SubId, Content, Lat, Lon, Date, ImageName, isLocationEnabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);"
         var statement:OpaquePointer? = nil
         if sqlite3_prepare_v2(database, update, -1, &statement, nil) == SQLITE_OK {
+            sqlite3_bind_int(statement, 1, Int32(note.id))
+            sqlite3_bind_int(statement, 3, Int32(note.subId))
+            sqlite3_bind_int(statement, 9, Int32(note.isLocationEnabled))
+            
+            sqlite3_bind_text(statement, 2,(note.title as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 4, (note.content as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 5, (note.lat as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 6, (note.lon as NSString).utf8String, -1, nil)
+            sqlite3_bind_double(statement, 7, note.date.timeIntervalSinceReferenceDate)
+            sqlite3_bind_text(statement, 8, (note.image as NSString).utf8String, -1, nil)
             executeQuery(query: statement)
         }
     }
@@ -178,6 +181,22 @@ class DBManager {
             sqlite3_bind_text(statement, 8, (note.image as NSString).utf8String, -1, nil)
             executeQuery(query: statement)
         }
+    }
+    
+    //MARK: Method to get the ID for the new Subject **ID Acts as AutoIncrement key
+    func getLastSubjectIDFromSubjects() -> Int {
+        openDB()
+        var noteID: Int = 0
+        var queryResult: OpaquePointer? = nil
+        let queryString = "SELECT MAX(ID), COUNT(ID) FROM SUBJECT;"
+        queryResult = selectQuery(queryString: queryString)
+        if sqlite3_step(queryResult) == SQLITE_ROW {
+            noteID = Int(sqlite3_column_int(queryResult, 0))
+            print("Note DB id is: \(noteID)")
+        }
+        sqlite3_finalize(queryResult)
+        sqlite3_close(database)
+        return noteID + 1
     }
     
     //MARK: Method to get the ID for the new note **ID Acts as AutoIncrement key
@@ -247,6 +266,7 @@ class DBManager {
             note.lon = String(cString:sqlite3_column_text(queryResult, 5)!)
             note.date = Date(timeIntervalSinceReferenceDate: sqlite3_column_double(queryResult, 6))
             note.image = String(cString:sqlite3_column_text(queryResult, 7)!)
+            note.isLocationEnabled = Int(sqlite3_column_int(queryResult, 8))
             notesArray.append(note)
         }
         sqlite3_finalize(queryResult)

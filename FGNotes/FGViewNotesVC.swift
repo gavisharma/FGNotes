@@ -21,6 +21,9 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         // Do any additional setup after loading the view.
         hamburgerLeadingConstraint.constant = -400
         notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE;")!
+        hamburgerView.layer.borderColor = UIColor.init(red: 78/255.0, green: 180/255.0, blue: 249/255.0, alpha: 1.0).cgColor
+        hamburgerView.layer.borderWidth = 2
+        hamburgerView.layer.cornerRadius = 10.0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,11 +57,14 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             notesArray = sharedDatabaseManager.getAllNotesWith(query: "SELECT * FROM NOTE ORDER BY SUBID ASC;")!
             notesTableView.reloadData()
         case 13:
-            print("View subjects clicked")
+            let selectSubjectVC: FGSelectSubjectVC = storyboard?.instantiateViewController(withIdentifier: "SelectSubject") as! FGSelectSubjectVC
+            self.present(selectSubjectVC, animated: true, completion: nil)
         case 14:
-            print("Add subjects clicked")
+            let noteVC:FGAddSubjectVC = storyboard?.instantiateViewController(withIdentifier: "addSubject") as! FGAddSubjectVC
+            self.present(noteVC, animated: true, completion: nil)
         case 15:
-            print("Remove subjects clicked")
+            let selectSubjectVC: FGSelectSubjectVC = storyboard?.instantiateViewController(withIdentifier: "SelectSubject") as! FGSelectSubjectVC
+            self.present(selectSubjectVC, animated: true, completion: nil)
         default:
             print("Nothing clicked")
         }
@@ -104,11 +110,27 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let noteCell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell")!
         let titleLabel: UILabel = noteCell.viewWithTag(1) as! UILabel
         let contentLabel:UILabel = noteCell.viewWithTag(2) as! UILabel
+        let dateLabel:UILabel = noteCell.viewWithTag(4) as! UILabel
         let imgView:UIImageView = noteCell.viewWithTag(3) as! UIImageView
         imgView.image = #imageLiteral(resourceName: "AddNote")
+        imgView.layer.cornerRadius = imgView.frame.size.height/2
+        
         let note: Note = notesArray[indexPath.row]
         titleLabel.text = note.title
         contentLabel.text = note.content
+        
+        let imageName: String = "\(note.id).jpg"
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = documentsDirectory.appendingPathComponent("Images/\(imageName)")
+        print(fileURL)
+        if let imageData = NSData.init(contentsOf: fileURL) {
+            let image = UIImage(data: imageData as Data) // Here you can attach image to UIImageView
+            imgView.image = image
+        }
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MMM-dd hh:mm:ss a"
+        dateLabel.text = df.string(from: (note.date))
+        
         return noteCell
     }
     
@@ -116,6 +138,7 @@ class FGViewNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let note: Note = notesArray[indexPath.row]
         let noteVC:FGNoteVC = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as! FGNoteVC
         noteVC.selectedNote = note
+        noteVC.viewMode = .viewNote
         self.present(noteVC, animated: true, completion: nil)
     }
     

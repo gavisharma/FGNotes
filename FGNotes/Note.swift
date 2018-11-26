@@ -18,6 +18,7 @@ class Note: NSObject {
     var lon: String = ""
     var date: Date = Date()
     var image: String = ""
+    var isLocationEnabled: Int = 0
     
     override init() {
         super.init()
@@ -29,6 +30,7 @@ class Note: NSObject {
         self.lon = ""
         self.date = Date()
         self.image = ""
+        self.isLocationEnabled = 0
     }
     
     func create(id: Int, title: String, subID: Int, content: String, lat: String, lon: String, date: Date, image: String) -> Note {

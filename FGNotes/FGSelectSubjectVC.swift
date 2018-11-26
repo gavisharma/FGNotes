@@ -10,6 +10,7 @@ import UIKit
 
 class FGSelectSubjectVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var subjectTableView: UITableView!
     var subjectsArray:[Subject] = []
 
     override func viewDidLoad() {
@@ -20,13 +21,19 @@ class FGSelectSubjectVC: UIViewController, UITableViewDelegate, UITableViewDataS
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        subjectsArray = sharedDatabaseManager.getListOfAllSubjects()!
+        subjectTableView.reloadData()
+    }
+    
     @IBAction func backButtonEvent(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func addNoteVC(_ sender: Any) {
-//        let noteVC:FGNoteVC = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as! FGNoteVC
-//        self.present(noteVC, animated: true, completion: nil)
+        let noteVC:FGAddSubjectVC = storyboard?.instantiateViewController(withIdentifier: "addSubject") as! FGAddSubjectVC
+        self.present(noteVC, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,7 +56,16 @@ class FGSelectSubjectVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let noteVC:FGNoteVC = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as! FGNoteVC
         let sub: Subject = subjectsArray[indexPath.row]
         noteVC.selectedSubjectID = sub.id
+        noteVC.viewMode = .createNote
         self.present(noteVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let subject: Subject = subjectsArray[indexPath.row]
+        let deleteQuery = "DELETE FROM SUBJECT where id = \(subject.id)"
+        sharedDatabaseManager.deleteFromDatabase(query: deleteQuery)
+        subjectsArray = sharedDatabaseManager.getListOfAllSubjects()!
+        subjectTableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
