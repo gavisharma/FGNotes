@@ -14,7 +14,8 @@ class Note: NSObject {
     var title: String = ""
     var subId: Int = 0
     var content: String = ""
-    var location: CLLocationCoordinate2D? = nil
+    var lat: String = ""
+    var lon: String = ""
     var date: String = ""
     var image: String = ""
     
@@ -24,16 +25,18 @@ class Note: NSObject {
         self.title = ""
         self.subId = 0
         self.content = ""
-        self.location = nil
+        self.lat = ""
+        self.lon = ""
         self.date = ""
         self.image = ""
     }
     
-    func create(id: Int, title: String, subID: Int, content: String, location: CLLocationCoordinate2D, date: String, image: String) -> Note {
+    func create(id: Int, title: String, subID: Int, content: String, lat: String, lon: String, date: String, image: String) -> Note {
         self.id = id
         self.title = title
         self.subId = subID
-        self.location = location
+        self.lat = lat
+        self.lon = lon
         self.date = date
         self.image = image
         return self
