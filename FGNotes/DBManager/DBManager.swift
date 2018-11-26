@@ -140,13 +140,14 @@ class DBManager {
         var statement:OpaquePointer? = nil
         if sqlite3_prepare_v2(database, update, -1, &statement, nil) == SQLITE_OK {
             sqlite3_bind_int(statement, 1, Int32(note.id))
-            sqlite3_bind_text(statement, 2, note.title, -1, nil)
             sqlite3_bind_int(statement, 3, Int32(note.subId))
-            sqlite3_bind_text(statement, 4, note.content, -1, nil)
-            sqlite3_bind_text(statement, 5, "0.47395", -1, nil)
-            sqlite3_bind_text(statement, 6, "0.36847", -1, nil)
-            sqlite3_bind_text(statement, 7, note.date, -1, nil)
-            sqlite3_bind_text(statement, 8, note.image, -1, nil)
+            sqlite3_bind_text(statement, 2,(note.title as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 4, (note.content as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 5, (note.lat as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 6, (note.lon as NSString).utf8String, -1, nil)
+            //            sqlite3_bind_text(statement, 7, (note.date as NSString).utf8String, -1, nil)
+            sqlite3_bind_double(statement, 7, note.date.timeIntervalSinceReferenceDate)
+            sqlite3_bind_text(statement, 8, (note.image as NSString).utf8String, -1, nil)
             executeQuery(query: statement)
         }
     }
@@ -168,13 +169,13 @@ class DBManager {
         var statement:OpaquePointer? = nil
         if sqlite3_prepare_v2(database, update, -1, &statement, nil) == SQLITE_OK {
             sqlite3_bind_int(statement, 1, Int32(note.id))
-            sqlite3_bind_text(statement, 2, note.title, -1, nil)
-            sqlite3_bind_int(statement, 3, Int32(note.id))
-            sqlite3_bind_text(statement, 4, note.content, -1, nil)
-            sqlite3_bind_text(statement, 5, note.lat, -1, nil)
-            sqlite3_bind_text(statement, 6, note.lon, -1, nil)
-            sqlite3_bind_text(statement, 7, note.date, -1, nil)
-            sqlite3_bind_text(statement, 8, note.image, -1, nil)
+            sqlite3_bind_int(statement, 3, Int32(note.subId))
+            sqlite3_bind_text(statement, 2,(note.title as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 4, (note.content as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 5, (note.lat as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(statement, 6, (note.lon as NSString).utf8String, -1, nil)
+            sqlite3_bind_double(statement, 7, note.date.timeIntervalSinceReferenceDate)
+            sqlite3_bind_text(statement, 8, (note.image as NSString).utf8String, -1, nil)
             executeQuery(query: statement)
         }
     }
@@ -222,7 +223,7 @@ class DBManager {
             let sub: Subject = Subject.init()
             sub.id = Int(sqlite3_column_int(queryResult, 0))
             sub.title = String(cString:sqlite3_column_text(queryResult, 1)!)
-            sub.desc = String(cString: sqlite3_column_text(queryResult, 2)!)
+            //            sub.desc = String(cString: sqlite3_column_text(queryResult, 2)!)
             subjectsArray.append(sub)
         }
         sqlite3_finalize(queryResult)
@@ -230,13 +231,12 @@ class DBManager {
         return subjectsArray
     }
     
-    //MARK: Method to reteive the list of all the notes created. An array of Note objects is returned
-    func getAllNotes() -> [Note]? {
+    //MARK: Method to reteive the list of all the notes created using sorting as well. An array of Note objects is returned
+    func getAllNotesWith(query:String) -> [Note]? {
         openDB()
         var queryResult: OpaquePointer? = nil
-        let queryString = "SELECT * FROM NOTE;"
         var notesArray:[Note] = []
-        queryResult = selectQuery(queryString: queryString)
+        queryResult = selectQuery(queryString: query)
         while sqlite3_step(queryResult) == SQLITE_ROW {
             let note: Note = Note.init()
             note.id = Int(sqlite3_column_int(queryResult, 0))
@@ -245,7 +245,7 @@ class DBManager {
             note.content = String(cString:sqlite3_column_text(queryResult, 3)!)
             note.lat = String(cString:sqlite3_column_text(queryResult, 4)!)
             note.lon = String(cString:sqlite3_column_text(queryResult, 5)!)
-            note.date = String(cString:sqlite3_column_text(queryResult, 6)!)
+            note.date = Date(timeIntervalSinceReferenceDate: sqlite3_column_double(queryResult, 6))
             note.image = String(cString:sqlite3_column_text(queryResult, 7)!)
             notesArray.append(note)
         }
@@ -254,7 +254,7 @@ class DBManager {
         return notesArray
     }
     
-    //MARK: Common method to execute the fetch requests 
+    //MARK: Common method to execute the fetch requests
     func selectQuery(queryString: String) -> OpaquePointer? {
         var queryStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(database, queryString, -1, &queryStatement, nil) == SQLITE_OK {
@@ -264,6 +264,24 @@ class DBManager {
         }
         return queryStatement
     }
+    
+    func deleteFromDatabase(query:String) {
+        openDB()
+        var deleteStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(database, query, -1, &deleteStatement, nil) == SQLITE_OK {
+            if sqlite3_step(deleteStatement) == SQLITE_DONE {
+                print("Successfully deleted row.")
+            } else {
+                print("Could not delete row.")
+            }
+        } else {
+            print("DELETE statement could not be prepared")
+        }
+        sqlite3_finalize(deleteStatement)
+        sqlite3_close(database)
+    }
+    
+    
 }
 
 
